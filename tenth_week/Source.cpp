@@ -6,26 +6,23 @@
 
 using namespace std;
 
-struct Subject
+struct DataBase
 {
-	string subject;
-	vector<int> marks;
-	Subject(string subj, int mark)
-	{
-		subject = subj;
-		marks.push_back(mark);
-	}
-	friend bool operator> (const Subject& s1, const Subject& s2);
-	friend bool operator< (const Subject& s1, const Subject& s2);
+	list<Student> studList;
+	list<Teacher> teacherList;
 };
+
+
+
+
 
 struct Zachetka
 {
-	map<Subject, Teacher> m;
-	void Add(string subj, int mark, Teacher teacher)
+	map<string,vector<int>> marks;
+	string tname;
+	void Add(string subj, int mark, string teacher)
 	{
-		Subject s(subj, mark);
-		m.emplace(s,teacher);
+		m.emplace(s,t);
 	}
 };
 
@@ -41,6 +38,7 @@ class Teacher:public IUser
 	
 public:
 	string name;
+	string subj;
 	Teacher(string name) 
 	{
 		this->name = name;
@@ -50,7 +48,7 @@ public:
 	}
 	void SetMark(Student s,int m)
 	{
-
+		s.zachetka.Add(subj,m,name);
 	}
 	void PrintStudListWithMarks(Subject)
 	{
@@ -65,8 +63,6 @@ public:
 class Admin:public IUser
 {
 	string name;
-	list<Student> studList;
-	list<Teacher> teacherList;
 public:
 	Admin(string name)
 {
@@ -74,16 +70,14 @@ public:
 }
 	void AddTeacher(Teacher t)
 	{
-		teacherList.push_back(t);
+		
 	}
 	void AddStudent(Student s) {
-		studList.push_back(s);
+		
 	}
 	void PrintAllMarks(string n) override
 	{
-		for (auto iter = studList.begin(); iter->name == n && iter != studList.end(); iter++)
-		{
-		}
+		
 	}
 	void PrintAllStudents()
 	{
@@ -109,11 +103,10 @@ public:
 	
 		for (auto it = zachetka.m.begin(); it != zachetka.m.end(); ++it)
 		{
-			cout << it->first.subject << " : " << it->second.name << endl;///вывод на экран
+			
 		}
 	}
-	friend bool operator> (const Student& s1, const Student& s2);
-	friend bool operator< (const Student& s1, const Student& s2);
+
 };
 
 
@@ -137,33 +130,10 @@ int main()
 	Admin a1("Иннокентий");
 	Student s1("Акакий");
 	Teacher t1("Рексар");
-
+	DataBase db;
 
 
 
 
 	return 0;
 }
-
-bool operator>(const Subject& s1, const Subject& s2)
-{
-	return s1.subject>s2.subject;
-}
-
-bool operator<(const Subject& s1, const Subject& s2)
-{
-	return s1.subject < s2.subject;
-}
-
-bool operator>(const Student& s1, const Student& s2)
-{
-	return s1.name > s2.name;
-}
-
-bool operator<(const Student& s1, const Student& s2)
-{
-	return s1.name < s2.name;
-}
-
-
-
